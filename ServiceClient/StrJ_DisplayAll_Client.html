@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>StrJ Display All Client</title>
+</head>
+<body>
+    <h3>
+        Please click to view all records from the web service
+    </h3>
+
+    <form id="target">
+        <input type="submit" value="Display All Records">
+    </form>
+
+    <br>
+    <p>
+        Message Contents:<br>
+        <span id="aMessage"></span>
+    </p>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+
+    <script>
+    $('#target').submit(function(event) {
+        event.preventDefault();
+
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/CIS266/RESTful/StrJ_Unit2_Ex3/ServiceProvider/StrJ_DisplayAll_API.php',
+            dataType: 'json',
+            encode: true
+        })
+        .done(function(data) {
+            var records = "";
+            for (var i = 0; i < data.length; i++) {
+                records +=
+                    data[i].contact_id + " " +
+                    data[i].first_name + " " +
+                    data[i].last_name + " " +
+                    data[i].email + " " +
+                    (data[i].phone ?? "") + " " +
+                    (data[i].major ?? "") + " " +
+                    (data[i].grad_year ?? "") + " " +
+                    data[i].created_at + "<br>";
+            }
+            $('#aMessage').html(records);
+        })
+        .fail(function() {
+            $('#aMessage').text('An error occurred. Please try again.');
+        });
+    });
+    </script>
+</body>
+</html>
